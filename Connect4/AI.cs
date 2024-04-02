@@ -78,7 +78,7 @@ namespace Connect4
                 {
                     if (tabla[5, i] == "X")
                     {
-                        tabla[4, i] == "O"
+                        tabla[4, i] == "O";
                         y = i;
                         x = 4;
                     }
@@ -86,12 +86,48 @@ namespace Connect4
             }
         }
 
+        public void checkAiTurn()
+        {
+            Random r = new Random();
+            if (checkOponentVertical(oponentX, oponentY) == true)
+            {
+                if (table[oponentX + 1, oponentY] == "*" && oponentX + 1 < table.GetLength(0))
+                {
+                    table[oponentX + 1, oponentY] = "O";
+                    x = oponentX + 1;
+                }
+                else
+                    avargeAiTurn();
+            }
+            else if (checkOponentHorizontal(oponentX, oponentY) == true)
+            {
+                for (int i = 0; i < 7; i++)
+                {
+                    if (table[oponentX, i] == "X" && table[oponentX, i + 1] == "X" && table[oponentX, i + 2] == "X" && table[oponentX, i + 3] == "*" || table[oponentX, i - 1] == "*")
+                    {
+                        if (table[oponentX, i + 3] == "*" && i + 3 < table.GetLength(1))
+                        {
+                            table[oponentX, i + 3] = "O";
+                            y = i + 3;
+                        }
+                        else if (table[oponentX, i - 1] == "*" && i - 1 < table.GetLength(1))
+                        {
+                            table[oponentX, i - 1] = "O";
+                            y = i - 1;
+                        }
+                        else
+                            avargeAiTurn();
+                        break;
+                    }
+                }
+            }
+            else
+                avargeAiTurn();
+        }
+
         public void avargeAiTurn()
         {
-            if (checkOponentHorizontal(oponentX, oponentY) == true)
-            {
 
-            }
         }
 
         //public bool checkOponentHorizontalDouble(int x, int y)
@@ -104,8 +140,6 @@ namespace Connect4
         //    }
         //    catch { return false; }
         //}
-
-        public void
 
         public bool checkOponentHorizontal(int x, int y)
         {
