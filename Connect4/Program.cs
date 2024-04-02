@@ -1,39 +1,69 @@
-﻿using System.Xml.Linq;
-
-int TERMX = Console.WindowWidth;
-int TERMY = Console.WindowHeight;
-
-Console.WriteLine(" ██████╗ ██████╗ ███╗   ██╗███╗   ██╗███████╗ ██████╗████████╗    ███████╗ ██████╗ ██╗   ██╗██████╗ ");
-Console.WriteLine("██╔════╝██╔═══██╗████╗  ██║████╗  ██║██╔════╝██╔════╝╚══██╔══╝    ██╔════╝██╔═══██╗██║   ██║██╔══██╗");
-Console.WriteLine("██║     ██║   ██║██╔██╗ ██║██╔██╗ ██║█████╗  ██║        ██║       █████╗  ██║   ██║██║   ██║██████╔╝");
-Console.WriteLine("██║     ██║   ██║██║╚██╗██║██║╚██╗██║██╔══╝  ██║        ██║       ██╔══╝  ██║   ██║██║   ██║██╔══██╗");
-Console.WriteLine("╚██████╗╚██████╔╝██║ ╚████║██║ ╚████║███████╗╚██████╗   ██║       ██║     ╚██████╔╝╚██████╔╝██║  ██║");
-Console.WriteLine(" ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═╝       ╚═╝      ╚═════╝  ╚═════╝ ╚═╝  ╚═╝");
-Console.WriteLine("Nyomj ENTER-t a továbblépéshez");
-Console.ReadLine();
-
-
-
-static void show(int[,] board)
+﻿namespace Connect4
 {
-    Console.Clear();
-    string[] cells = { " ", "●", "○" };
-
-    Console.WriteLine("\n\n");
-    Console.WriteLine("  1   2   3   4   5   6   7 ");
-    for (int row = 5; row >= 0; row--)
+    public struct playerInfo
     {
-        Console.Write("+---+---+---+---+---+---+---+\n|");
-        for (int col = 0; col < 7; col++)
+        public String playerName;
+        public char playerID;
+    };
+    class Program
+    {
+        static void Main(string[] args)
         {
-            Console.Write(" " + cells[board[row, col]] + " |");
-        }
-        Console.WriteLine();
-    }
-    Console.WriteLine("+---+---+---+---+---+---+---+\n\n\n");
-}
+            Console.WriteLine(" ██████╗ ██████╗ ███╗   ██╗███╗   ██╗███████╗ ██████╗████████╗    ███████╗ ██████╗ ██╗   ██╗██████╗ ");
+            Console.WriteLine("██╔════╝██╔═══██╗████╗  ██║████╗  ██║██╔════╝██╔════╝╚══██╔══╝    ██╔════╝██╔═══██╗██║   ██║██╔══██╗");
+            Console.WriteLine("██║     ██║   ██║██╔██╗ ██║██╔██╗ ██║█████╗  ██║        ██║       █████╗  ██║   ██║██║   ██║██████╔╝");
+            Console.WriteLine("██║     ██║   ██║██║╚██╗██║██║╚██╗██║██╔══╝  ██║        ██║       ██╔══╝  ██║   ██║██║   ██║██╔══██╗");
+            Console.WriteLine("╚██████╗╚██████╔╝██║ ╚████║██║ ╚████║███████╗╚██████╗   ██║       ██║     ╚██████╔╝╚██████╔╝██║  ██║");
+            Console.WriteLine(" ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═╝       ╚═╝      ╚═════╝  ╚═════╝ ╚═╝  ╚═╝");
+            Console.WriteLine("Nyomj ENTER-t a továbblépéshez");
+            Console.ReadLine();
 
-static int[,] create_board()
-{
-    return new int[6, 7];
+            playerInfo playerOne = new playerInfo();
+            playerInfo playerTwo = new playerInfo();
+            char[,] board = new char[9, 10];
+            int dropChoice, win, full, again;
+
+            Console.WriteLine("Add meg a neved: ");
+            playerOne.playerName = Console.ReadLine();
+            playerOne.playerID = 'X';
+            playerTwo.playerName = "Robot";
+            playerTwo.playerID = 'O';
+
+            full = 0;
+            win = 0;
+            again = 0;
+
+            Console.Clear();
+            DisplayBoard(board);
+
+        }
+        static void DisplayBoard(char[,] board)
+        {
+            Console.WriteLine(" ██████╗ ██████╗ ███╗   ██╗███╗   ██╗███████╗ ██████╗████████╗    ███████╗ ██████╗ ██╗   ██╗██████╗ ");
+            Console.WriteLine("██╔════╝██╔═══██╗████╗  ██║████╗  ██║██╔════╝██╔════╝╚══██╔══╝    ██╔════╝██╔═══██╗██║   ██║██╔══██╗");
+            Console.WriteLine("██║     ██║   ██║██╔██╗ ██║██╔██╗ ██║█████╗  ██║        ██║       █████╗  ██║   ██║██║   ██║██████╔╝");
+            Console.WriteLine("██║     ██║   ██║██║╚██╗██║██║╚██╗██║██╔══╝  ██║        ██║       ██╔══╝  ██║   ██║██║   ██║██╔══██╗");
+            Console.WriteLine("╚██████╗╚██████╔╝██║ ╚████║██║ ╚████║███████╗╚██████╗   ██║       ██║     ╚██████╔╝╚██████╔╝██║  ██║");
+            Console.WriteLine(" ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═╝       ╚═╝      ╚═════╝  ╚═════╝ ╚═╝  ╚═╝\n");
+
+            int rows = 6, columns = 7, i, ix;
+
+            for (i = 1; i <= rows; i++)
+            {
+                Console.Write("|");
+                for (ix = 1; ix <= columns; ix++)
+                {
+                    if (board[i, ix] != 'X' && board[i, ix] != 'O')
+                        board[i, ix] = '*';
+
+                    Console.Write(board[i, ix]);
+
+                }
+
+                Console.Write("| \n");
+            }
+
+        }
+
+    }
 }
