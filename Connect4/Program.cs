@@ -28,6 +28,8 @@
             playerOne.playerID = 'X';
             playerTwo.playerName = "Robot";
             playerTwo.playerID = 'O';
+            Console.WriteLine("Válassz nehézségi szintet: \tKönnyű(1)\tKözepes(2)\tNehéz(3)");
+            int nLevel = int.Parse(Console.ReadLine());
 
             full = 0;
             win = 0;
@@ -320,56 +322,14 @@
         static int secondAiTurn(char[,] board, int x, int y)
         {
             Random r = new Random();
-            if (checkHorizontal(x, y, board) == 3 && checkVertical(x, y, board) == 3)
+            if (checkVertical(x, y, board))
             {
-                if (r.Next(0, 2) == 0)
-                {
-                    if (y - 1 >= 0 && board[x, y - 1] == '*')
-                    {
-                        return y - 1;
-                    }
-                    else if (y + 1 < 8 && board[x, y + 1] == '*')
-                    {
-                        return y + 1;
-                    }
-                }
-                else
-                {
-                    if (x - 1 > 0 && board[x - 1, y] == '*')
-                    {
-                        return y;
-                    }
-                }
-            }
-            else if (checkVertical(x, y, board) == 3)
-            {
-                if (x - 1 > 0 && board[x - 1, y] == '*')
-                {
-                    return y;
-                }
-            }
-            else if (checkHorizontal(x, y, board) == 3)
-            {
-                if (y - 1 >= 0 && board[x, y - 1] == '*')
-                {
-                    return y - 1;
-                }
-                else if (y + 1 < 8 && board[x, y + 1] == '*')
-                {
-                    return y + 1;
-                }
+                return y;
             }
             else
             {
-                for (int i = 0; i < 8; i++)
-                {
-                    if (board[6, i] == 'X')
-                    {
-                        return i;
-                    }
-                }
+                return checkHorizontal(x, y, board);
             }
-            return 0;
         }
 
         //public void CheckAiTurn(char[,] board)
@@ -450,57 +410,29 @@
         //    return false;
         //}
 
-        static int checkVertical(int x, int y, char[,] board)
+        static bool checkVertical(int x, int y, char[,] board)
         {
-            if (x - 3 >= 0)
+            if (board[x - 1, y] == '*')
             {
-                if (board[x - 1, y] == '*' && board[x - 2, y] == '*' && board[x - 3, y] == '*')
-                {
-                    return 3;
-                }
-                else if (board[x - 1, y] == '*' && board[x - 2, y] == '*')
-                {
-                    return 2;
-                }
-                else if (board[x - 1, y] == '*')
-                {
-                    return 1;
-                }
+                return true;
             }
-            return 0;
+            return false;
         }
 
         static int checkHorizontal(int x, int y, char[,] board)
         {
-            // ellenőrizzük az indexek érvényességét
-            if (y - 3 >= 0)
+            if (y == 4 && board[x, y - 1] == 'X')
             {
-                // Ha az y-1 vagy y+1 indexek értéke "*" és az y-2 vagy y+2 indexek is "*" vagy az y-3 vagy y+3 indexek is "*"
-                if (board[x, y - 1] == '*' && board[x, y - 2] == '*' && board[x, y - 3] == '*')
-                {
-                    return 3;
-                }
-                // Ha az y-1 vagy y+1 indexek értéke "*" és az y-2 vagy y+2 indexek közül valamelyik nem "*"
-                else if ((board[x, y - 1] == '*' && board[x, y - 2] != '*') ||
-                         (board[x, y + 1] == '*' && board[x, y + 2] != '*'))
-                {
-                    return 2;
-                }
-                // Ha az y-1 vagy y+1 indexek értéke "*" és az y-2 vagy y+2 indexek közül egyik sem "*" vagy az y-3 vagy y+3 indexek értéke "*" és az y-1 vagy y+1 indexek közül valamelyik nem "*"
-                else if ((board[x, y - 1] == '*' && board[x, y - 2] != '*' && board[x, y + 1] != '*') ||
-                         (board[x, y + 1] == '*' && board[x, y + 2] != '*' && board[x, y - 1] != '*'))
-                {
-                    return 1;
-                }
+                return 5;
+            }
+            else if (y - 3 > 0)
+            {
+                return y - 1;
             }
             else
             {
-                if (board[x, y + 1] == '*' && board[x, y + 2] == '*' && board[x, y + 3] == '*')
-                {
-                    return 3;
-                }
+                return y + 1;
             }
-            return 0;
         }
     }
 }
