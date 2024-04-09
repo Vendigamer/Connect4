@@ -21,7 +21,7 @@
             playerInfo playerOne = new playerInfo();
             playerInfo playerTwo = new playerInfo();
             char[,] board = new char[9, 10];
-            int dropChoice, win, full, again;
+            int dropChoice, aiDropChoice, win, full, again;
 
             Console.WriteLine("Add meg a neved: ");
             playerOne.playerName = Console.ReadLine();
@@ -32,37 +32,76 @@
             full = 0;
             win = 0;
             again = 0;
+            int index = 0;
+            int x = 6, y = 0;
 
             Console.Clear();
             DisplayBoard(board);
             do
             {
-                dropChoice = PlayerDrop(board, playerOne);
-                CheckAlso(board, playerOne, dropChoice);
-                DisplayBoard(board);
-                win = CheckForWin(board, playerOne);
-                if (win == 1)
+                if (index == 0)
                 {
-                    PlayerWin(playerOne);
-                    again = restart(board);
-                    if (again == 2)
+                    dropChoice = PlayerDrop(board, playerOne);
+                    CheckAlso(board, playerOne, dropChoice);
+                    DisplayBoard(board);
+                    win = CheckForWin(board, playerOne);
+                    if (win == 1)
                     {
-                        break;
+                        PlayerWin(playerOne);
+                        again = restart(board);
+                        if (again == 2)
+                        {
+                            break;
+                        }
                     }
-                }
 
-                dropChoice = PlayerDrop(board, playerTwo);
-                CheckAlso(board, playerTwo, dropChoice);
-                DisplayBoard(board);
-                win = CheckForWin(board, playerTwo);
-                if (win == 1)
-                {
-                    PlayerWin(playerTwo);
-                    again = restart(board);
-                    if (again == 2)
+                    y = aiDropChoice = firstAiTurn(board);
+                    CheckAlso(board, playerTwo, aiDropChoice);
+                    DisplayBoard(board);
+                    win = CheckForWin(board, playerTwo);
+                    if (win == 1)
                     {
-                        break;
+                        PlayerWin(playerTwo);
+                        again = restart(board);
+                        if (again == 2)
+                        {
+                            break;
+                        }
                     }
+
+                    index++;
+                }
+                else if (index == 1)
+                {
+                    dropChoice = PlayerDrop(board, playerOne);
+                    CheckAlso(board, playerOne, dropChoice);
+                    DisplayBoard(board);
+                    win = CheckForWin(board, playerOne);
+                    if (win == 1)
+                    {
+                        PlayerWin(playerOne);
+                        again = restart(board);
+                        if (again == 2)
+                        {
+                            break;
+                        }
+                    }
+
+                    aiDropChoice = secondAiTurn(board, x, y);
+                    CheckAlso(board, playerTwo, aiDropChoice);
+                    DisplayBoard(board);
+                    win = CheckForWin(board, playerTwo);
+                    if (win == 1)
+                    {
+                        PlayerWin(playerTwo);
+                        again = restart(board);
+                        if (again == 2)
+                        {
+                            break;
+                        }
+                    }
+
+                    index++;
                 }
 
                 full = FullBoard(board);
@@ -73,8 +112,8 @@
                 }
 
             } while (again != 2);
-
         }
+
         static void DisplayBoard(char[,] board)
         {
             Console.WriteLine(" ██████╗ ██████╗ ███╗   ██╗███╗   ██╗███████╗ ██████╗████████╗    ███████╗ ██████╗ ██╗   ██╗██████╗ ");
@@ -84,23 +123,19 @@
             Console.WriteLine("╚██████╗╚██████╔╝██║ ╚████║██║ ╚████║███████╗╚██████╗   ██║       ██║     ╚██████╔╝╚██████╔╝██║  ██║");
             Console.WriteLine(" ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═╝       ╚═╝      ╚═════╝  ╚═════╝ ╚═╝  ╚═╝\n");
 
-            int rows = 6, columns = 7, i, ix;
+            int rows = 6, columns = 7;
 
-            for (i = 1; i <= rows; i++)
+            for (int i = 1; i <= rows; i++)
             {
-                Console.Write("|");
-                for (ix = 1; ix <= columns; ix++)
+                for (int ix = 1; ix <= columns; ix++)
                 {
                     if (board[i, ix] != 'X' && board[i, ix] != 'O')
                         board[i, ix] = '*';
 
                     Console.Write(board[i, ix]);
-
                 }
-
-                Console.Write("| \n");
+                Console.Write('\n');
             }
-
         }
 
         static int PlayerDrop(char[,] board, playerInfo activePlayer)
@@ -221,7 +256,7 @@
         static void PlayerWin(playerInfo activePlayer)
         {
             if (activePlayer.playerID == 'X')
-            Console.WriteLine("\n" + activePlayer.playerName + ", te győztél! Gratulálok! :D");
+                Console.WriteLine("\n" + activePlayer.playerName + ", te győztél! Gratulálok! :D");
             else
             {
                 Console.WriteLine("\nSajnálom, vesztettél. :(");
@@ -246,7 +281,7 @@
                 }
                 DisplayBoard(board);
             }
-            else 
+            else
             {
                 Console.Clear();
                 Console.WriteLine(" ██████╗ ██████╗ ███╗   ██╗███╗   ██╗███████╗ ██████╗████████╗    ███████╗ ██████╗ ██╗   ██╗██████╗ ");
@@ -257,96 +292,85 @@
                 Console.WriteLine(" ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═╝       ╚═╝      ╚═════╝  ╚═════╝ ╚═╝  ╚═╝\n");
                 Console.WriteLine("Viszlát!");
             }
-                
+
             return restart;
         }
 
         //int x = 5, y = 0;
 
-        //public void firstAiTurn(char[,] board)
-        //{
-        //    for (int i = 0; i < 7; i++)
-        //    {
-        //        if (board[5, i] == 'X')
-        //        {
-        //            if (i - 1 >= 0)
-        //            {
-        //                board[5, i - 1] = 'O';
-        //                //y = i - 1;
-        //                return;
-        //            }
-        //            else if (i + 1 < 7)
-        //            {
-        //                board[5, i + 1] = 'O';
-        //                //y = i + 1;
-        //                return;
-        //            }
-        //        }
-        //    }
-        //}
+        static int firstAiTurn(char[,] board)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                if (board[6, i] == 'X')
+                {
+                    if (i < 4)
+                    {
+                        return i + 1;
+                    }
+                    else
+                    {
+                        return i - 1;
+                    }
+                }
+            }
+            return 0;
+        }
 
-        //public void secondAiTurn(char[,] board)
-        //{
-        //    Random r = new Random();
-        //    if (checkHorizontal(x, y, board) == 3 && checkVertical(x, y, board) == 3)
-        //    {
-        //        if (r.Next(0, 2) == 0)
-        //        {
-        //            if (y - 1 >= 0 && board[x, y - 1] != 'X')
-        //            {
-        //                board[x, y - 1] = 'O';
-        //                y = y - 1;
-        //            }
-        //            else if (y + 1 < board.GetLength(1) && board[x, y + 1] != 'X')
-        //            {
-        //                board[x, y + 1] = 'O';
-        //                y = y + 1;
-        //            }
-        //        }
-        //        else
-        //        {
-        //            if (x + 1 < board.GetLength(0) && board[x + 1, y] != 'X')
-        //            {
-        //                board[x + 1, y] = 'O';
-        //                x = x + 1;
-        //            }
-        //        }
-        //    }
-        //    else if (checkVertical(x, y, board) == 3)
-        //    {
-        //        if (x + 1 < board.GetLength(0) && board[x + 1, y] != 'X')
-        //        {
-        //            board[x + 1, y] = 'O';
-        //            x = x + 1;
-        //        }
-        //    }
-        //    else if (checkHorizontal(x, y, board) == 3)
-        //    {
-        //        if (y - 1 >= 0 && board[x, y - 1] != 'X')
-        //        {
-        //            board[x, y - 1] = 'O';
-        //            y = y - 1;
-        //        }
-        //        else if (y + 1 < board.GetLength(1) && board[x, y + 1] != 'X')
-        //        {
-        //            board[x, y + 1] = 'O';
-        //            y = y + 1;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        for (int i = 0; i < 7; i++)
-        //        {
-        //            if (board[5, i] == 'X')
-        //            {
-        //                board[4, i] = 'O';
-        //                x = 4;
-        //                y = i;
-        //                break;
-        //            }
-        //        }
-        //    }
-        //}
+        static int secondAiTurn(char[,] board, int x, int y)
+        {
+            Random r = new Random();
+            if (checkHorizontal(x, y, board) == 3 && checkVertical(x, y, board) == 3)
+            {
+                if (r.Next(0, 2) == 0)
+                {
+                    if (y - 1 >= 0 && board[x, y - 1] == '*')
+                    {
+                        return y - 1;
+                    }
+                    else if (y + 1 < 8 && board[x, y + 1] == '*')
+                    {
+                        return y + 1;
+                    }
+                }
+                else
+                {
+                    if (x - 1 > 0 && board[x - 1, y] == '*')
+                    {
+                        return y;
+                    }
+                }
+            }
+            else if (checkVertical(x, y, board) == 3)
+            {
+                if (x - 1 > 0 && board[x - 1, y] == '*')
+                {
+                    return y;
+                }
+            }
+            else if (checkHorizontal(x, y, board) == 3)
+            {
+                if (y - 1 >= 0 && board[x, y - 1] == '*')
+                {
+                    return y - 1;
+                }
+                else if (y + 1 < 8 && board[x, y + 1] == '*')
+                {
+                    return y + 1;
+                }
+            }
+            else
+            {
+                for (int i = 0; i < 8; i++)
+                {
+                    if (board[6, i] == 'X')
+                    {
+                        return i;
+                    }
+                }
+            }
+            return 0;
+        }
 
         //public void CheckAiTurn(char[,] board)
         //{
@@ -426,55 +450,57 @@
         //    return false;
         //}
 
-        //public int checkVertical(int x, int y, char[,] board)
-        //{
-        //    if (y + 3 < board.GetLength(1))
-        //    {
-        //        if (board[x, y + 1] == '*' && board[x, y + 2] == '*' && board[x, y + 3] == '*')
-        //        {
-        //            return 3;
-        //        }
-        //        else if (board[x, y + 1] == '*' && board[x, y + 2] == '*')
-        //        {
-        //            return 2;
-        //        }
-        //        else if (board[x, y + 1] == '*')
-        //        {
-        //            return 1;
-        //        }
-        //    }
-        //    return 0;
-        //}
+        static int checkVertical(int x, int y, char[,] board)
+        {
+            if (x - 3 >= 0)
+            {
+                if (board[x - 1, y] == '*' && board[x - 2, y] == '*' && board[x - 3, y] == '*')
+                {
+                    return 3;
+                }
+                else if (board[x - 1, y] == '*' && board[x - 2, y] == '*')
+                {
+                    return 2;
+                }
+                else if (board[x - 1, y] == '*')
+                {
+                    return 1;
+                }
+            }
+            return 0;
+        }
 
-        //public int checkHorizontal(int x, int y, char[,] board)
-        //{
-        //    // Ellenőrizzük az indexek érvényességét
-        //    if (x - 3 >= 0 && x + 3 < board.GetLength(0) && y >= 0 && y < board.GetLength(1))
-        //    {
-        //        // Ha az x-1 vagy x+1 indexek értéke "*" és az x-2 vagy x+2 indexek is "*" vagy az x-3 vagy x+3 indexek is "*"
-        //        if ((board[x - 1, y] == '*' && board[x - 2, y] == '*') ||
-        //            (board[x + 1, y] == '*' && board[x + 2, y] == '*') ||
-        //            (board[x - 1, y] == '*' && board[x - 2, y] == '*' && board[x - 3, y] == '*') ||
-        //            (board[x + 1, y] == '*' && board[x + 2, y] == '*' && board[x + 3, y] == '*'))
-        //        {
-        //            return 3;
-        //        }
-        //        // Ha az x-1 vagy x+1 indexek értéke "*" és az x-2 vagy x+2 indexek közül valamelyik nem "*"
-        //        else if ((board[x - 1, y] == '*' && board[x - 2, y] != '*') ||
-        //                 (board[x + 1, y] == '*' && board[x + 2, y] != '*'))
-        //        {
-        //            return 2;
-        //        }
-        //        // Ha az x-1 vagy x+1 indexek értéke "*" és az x-2 vagy x+2 indexek közül egyik sem "*" vagy az x-3 vagy x+3 indexek értéke "*" és az x-1 vagy x+1 indexek közül valamelyik nem "*"
-        //        else if ((board[x - 1, y] == '*' && board[x - 2, y] != '*' && board[x + 1, y] != '*') ||
-        //                 (board[x + 1, y] == '*' && board[x + 2, y] != '*' && board[x - 1, y] != '*') ||
-        //                 (board[x - 1, y] != '*' && board[x + 1, y] == '*' && board[x + 2, y] != '*') ||
-        //                 (board[x + 1, y] != '*' && board[x - 1, y] == '*' && board[x - 2, y] != '*'))
-        //        {
-        //            return 1;
-        //        }
-        //    }
-        //    return 0;
-        //}
+        static int checkHorizontal(int x, int y, char[,] board)
+        {
+            // ellenőrizzük az indexek érvényességét
+            if (y - 3 >= 0)
+            {
+                // Ha az y-1 vagy y+1 indexek értéke "*" és az y-2 vagy y+2 indexek is "*" vagy az y-3 vagy y+3 indexek is "*"
+                if (board[x, y - 1] == '*' && board[x, y - 2] == '*' && board[x, y - 3] == '*')
+                {
+                    return 3;
+                }
+                // Ha az y-1 vagy y+1 indexek értéke "*" és az y-2 vagy y+2 indexek közül valamelyik nem "*"
+                else if ((board[x, y - 1] == '*' && board[x, y - 2] != '*') ||
+                         (board[x, y + 1] == '*' && board[x, y + 2] != '*'))
+                {
+                    return 2;
+                }
+                // Ha az y-1 vagy y+1 indexek értéke "*" és az y-2 vagy y+2 indexek közül egyik sem "*" vagy az y-3 vagy y+3 indexek értéke "*" és az y-1 vagy y+1 indexek közül valamelyik nem "*"
+                else if ((board[x, y - 1] == '*' && board[x, y - 2] != '*' && board[x, y + 1] != '*') ||
+                         (board[x, y + 1] == '*' && board[x, y + 2] != '*' && board[x, y - 1] != '*'))
+                {
+                    return 1;
+                }
+            }
+            else
+            {
+                if (board[x, y + 1] == '*' && board[x, y + 2] == '*' && board[x, y + 3] == '*')
+                {
+                    return 3;
+                }
+            }
+            return 0;
+        }
     }
 }
