@@ -75,7 +75,6 @@
                 }
                 else if (index == 1)
                 {
-                    Console.WriteLine(board[1, 4]);
                     dropChoice = PlayerDrop(board, playerOne);
                     CheckAlso(board, playerOne, dropChoice);
                     DisplayBoard(board);
