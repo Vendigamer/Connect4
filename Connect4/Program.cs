@@ -75,7 +75,7 @@
                 }
                 else if (index == 1)
                 {
-                    //Console.WriteLine(board[6, 4]);
+                    Console.WriteLine(board[1, 4]);
                     dropChoice = PlayerDrop(board, playerOne);
                     CheckAlso(board, playerOne, dropChoice);
                     DisplayBoard(board);
@@ -426,13 +426,13 @@
                 {
                     if (checkOponentHorizontal(oponentX, oponentY, board))
                     {
-                        if (oponentY - 3 >= 0 && board[oponentX, oponentY - 3] == '*')
+                        if (oponentY - 1 >= 0 && board[oponentX, oponentY - 1] == '*')
                         {
-                            return oponentY - 3;
+                            return oponentY - 1;
                         }
-                        else if (oponentY + 3 <= 7 && board[oponentX, oponentY + 3] == '*')
+                        else if (oponentY + 1 <= 7 && board[oponentX, oponentY + 1] == '*')
                         {
-                            return oponentY + 3;
+                            return oponentY + 1;
                         }
                         else
                         {
@@ -477,13 +477,13 @@
                 {
                     if (checkOponentHorizontal(oponentX, oponentY, board))
                     {
-                        if (oponentY - 3 >= 0 && board[oponentX, oponentY - 3] == '*')
+                        if (oponentY - 1 >= 0 && board[oponentX, oponentY - 1] == '*')
                         {
-                            return oponentY - 3;
+                            return oponentY - 1;
                         }
-                        else if (oponentY + 3 <= 7 && board[oponentX, oponentY + 3] == '*')
+                        else if (oponentY + 1 <= 7 && board[oponentX, oponentY + 1] == '*')
                         {
-                            return oponentY + 3;
+                            return oponentY + 1;
                         }
                         else
                         {
@@ -564,7 +564,7 @@
             else
             {
                 int rand = r.Next(1, 8);
-                while (board[0, rand] != '*')
+                while (board[1, rand] != '*')
                 {
                     rand = r.Next(1, 8);
                 }
