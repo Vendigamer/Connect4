@@ -167,8 +167,13 @@
                 {
                     if (board[i, ix] != 'X' && board[i, ix] != 'O')
                         board[i, ix] = '*';
+                    if (board[i, ix] == 'X')
+                        Console.ForegroundColor = ConsoleColor.Red;
+                    if (board[i, ix] == 'O')
+                        Console.ForegroundColor = ConsoleColor.Blue;
 
                     Console.Write(board[i, ix]);
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
                 Console.Write('\n');
             }
@@ -178,7 +183,7 @@
         {
             int dropChoice;
 
-            Console.WriteLine("\n Te jössz! \n");
+            Console.WriteLine($"\n {activePlayer},te jössz! \n");
             do
             {
                 Console.WriteLine("Adj meg egy számot 1 és 7 között: \n");
@@ -292,7 +297,7 @@
         static void PlayerWin(playerInfo activePlayer)
         {
             if (activePlayer.playerID == 'X')
-                Console.WriteLine("\n" + activePlayer.playerName + "Te győztél! Gratulálok! :D");
+                Console.WriteLine("\n" + activePlayer.playerName + " te győztél! Gratulálok! :D");
             else
             {
                 Console.WriteLine("\nSajnálom, vesztettél. :(");
