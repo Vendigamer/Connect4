@@ -183,7 +183,7 @@
         {
             int dropChoice;
 
-            Console.WriteLine($"\n {activePlayer},te jössz! \n");
+            Console.WriteLine($"\n {activePlayer.playerName}, te jössz! \n");
             do
             {
                 Console.WriteLine("Adj meg egy számot 1 és 7 között: \n");
@@ -532,7 +532,7 @@
         {
             Random r = new Random();
             int x = checkAiX(y, board);
-            if (x + 1 <= 6 && board[x + 1, y] == 'O' && board[x - 1, y] == '*')
+            if (x + 1 <= 6 && board[x + 1, y] == 'O' && x - 1 >= 0 && board[x - 1, y] == '*')
             {
                 return y;
             }
