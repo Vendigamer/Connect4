@@ -75,7 +75,6 @@
                 }
                 else if (index == 1)
                 {
-                    Console.WriteLine(board[6, 4]);
                     dropChoice = PlayerDrop(board, playerOne);
                     CheckAlso(board, playerOne, dropChoice);
                     DisplayBoard(board);
@@ -293,7 +292,7 @@
         static void PlayerWin(playerInfo activePlayer)
         {
             if (activePlayer.playerID == 'X')
-                Console.WriteLine("\n" + activePlayer.playerName + ", te győztél! Gratulálok! :D");
+                Console.WriteLine("\n" + activePlayer.playerName + "Te győztél! Gratulálok! :D");
             else
             {
                 Console.WriteLine("\nSajnálom, vesztettél. :(");
@@ -371,17 +370,17 @@
             int chance = r.Next(1, 11);
             if (choice == 1)
             {
-                if (checkOponentHorizontal(oponentX, oponentY, board) || checkOponentVertical(oponentX, oponentY, board) || checkOponentHorizontalDouble(oponentX, oponentY, board) && chance <= 15)
+                if ((checkOponentHorizontal(oponentX, oponentY, board) || checkOponentVertical(oponentX, oponentY, board) || checkOponentHorizontalDouble(oponentX, oponentY, board)) && chance <= 3)
                 {
                     if (checkOponentHorizontal(oponentX, oponentY, board))
                     {
-                        if (oponentY - 3 >= 0 && board[oponentX, oponentY - 3] == '*')
+                        if (oponentY - 1 >= 0 && board[oponentX, oponentY - 1] == '*')
                         {
-                            return oponentY - 3;
+                            return oponentY - 1;
                         }
-                        else if (oponentY + 3 <= board.GetLength(0) && board[oponentX, oponentY + 3] == '*')
+                        else if (oponentY + 1 <= 7 && board[oponentX, oponentY + 1] == '*')
                         {
-                            return oponentY + 3;
+                            return oponentY + 1;
                         }
                         else
                         {
@@ -390,7 +389,7 @@
                     }
                     else if (checkOponentVertical(oponentX, oponentY, board))
                     {
-                        if (oponentX - 1 > 0 && board[oponentX - 1, oponentY] == '*')
+                        if (oponentX - 1 >= 0 && board[oponentX - 1, oponentY] == '*')
                         {
                             return oponentY;
                         }
@@ -405,7 +404,7 @@
                         {
                             return oponentY - 2;
                         }
-                        else if (oponentY + 2 <= board.GetLength(0) && board[oponentX, oponentY + 2] == '*')
+                        else if (oponentY + 2 <= 7 && board[oponentX, oponentY + 2] == '*')
                         {
                             return oponentY + 2;
                         }
@@ -422,17 +421,17 @@
             }
             else if (choice == 2)
             {
-                if (checkOponentHorizontal(oponentX, oponentY, board) || checkOponentVertical(oponentX, oponentY, board) || checkOponentHorizontalDouble(oponentX, oponentY, board) && chance <= 4)
+                if ((checkOponentHorizontal(oponentX, oponentY, board) || checkOponentVertical(oponentX, oponentY, board) || checkOponentHorizontalDouble(oponentX, oponentY, board)) && chance <= 6)
                 {
                     if (checkOponentHorizontal(oponentX, oponentY, board))
                     {
-                        if (oponentY - 3 >= 0 && board[oponentY - 3, oponentX] == '*')
+                        if (oponentY - 1 >= 0 && board[oponentX, oponentY - 1] == '*')
                         {
-                            return oponentY - 3;
+                            return oponentY - 1;
                         }
-                        else if (oponentY + 3 <= board.GetLength(0) && board[oponentY + 3, oponentX] == '*')
+                        else if (oponentY + 1 <= 7 && board[oponentX, oponentY + 1] == '*')
                         {
-                            return oponentY + 3;
+                            return oponentY + 1;
                         }
                         else
                         {
@@ -441,9 +440,9 @@
                     }
                     else if (checkOponentVertical(oponentX, oponentY, board))
                     {
-                        if (oponentX <= board.GetLength(1) && board[oponentY, oponentX + 1] == '*')
+                        if (oponentX - 1 >= 0 && board[oponentX - 1, oponentY] == '*')
                         {
-                            return oponentX + 1;
+                            return oponentY;
                         }
                         else
                         {
@@ -452,11 +451,11 @@
                     }
                     else
                     {
-                        if (oponentY - 2 >= 0 && board[oponentY - 2, oponentX] == '*')
+                        if (oponentY - 2 >= 0 && board[oponentX, oponentY - 2] == '*')
                         {
                             return oponentY - 2;
                         }
-                        else if (oponentY + 2 <= board.GetLength(0) && board[oponentY + 2, oponentX] == '*')
+                        else if (oponentY + 2 <= 7 && board[oponentX, oponentY + 2] == '*')
                         {
                             return oponentY + 2;
                         }
@@ -473,17 +472,17 @@
             }
             else
             {
-                if (checkOponentHorizontal(oponentX, oponentY, board) || checkOponentVertical(oponentX, oponentY, board) || checkOponentHorizontalDouble(oponentX, oponentY, board) && chance <= 1)
+                if ((checkOponentHorizontal(oponentX, oponentY, board) || checkOponentVertical(oponentX, oponentY, board) || checkOponentHorizontalDouble(oponentX, oponentY, board)) && chance <= 9)
                 {
                     if (checkOponentHorizontal(oponentX, oponentY, board))
                     {
-                        if (oponentY - 3 >= 0 && board[oponentY - 3, oponentX] == '*')
+                        if (oponentY - 1 >= 0 && board[oponentX, oponentY - 1] == '*')
                         {
-                            return oponentY - 3;
+                            return oponentY - 1;
                         }
-                        else if (oponentY + 3 <= board.GetLength(0) && board[oponentY + 3, oponentX] == '*')
+                        else if (oponentY + 1 <= 7 && board[oponentX, oponentY + 1] == '*')
                         {
-                            return oponentY + 3;
+                            return oponentY + 1;
                         }
                         else
                         {
@@ -492,9 +491,9 @@
                     }
                     else if (checkOponentVertical(oponentX, oponentY, board))
                     {
-                        if (oponentX <= board.GetLength(1) && board[oponentY, oponentX + 1] == '*')
+                        if (oponentX - 1 >= 0 && board[oponentX - 1, oponentY] == '*')
                         {
-                            return oponentX + 1;
+                            return oponentY;
                         }
                         else
                         {
@@ -503,11 +502,11 @@
                     }
                     else
                     {
-                        if (oponentY - 2 >= 0 && board[oponentY - 2, oponentX] == '*')
+                        if (oponentY - 2 >= 0 && board[oponentX, oponentY - 2] == '*')
                         {
                             return oponentY - 2;
                         }
-                        else if (oponentY + 2 <= board.GetLength(0) && board[oponentY + 2, oponentX] == '*')
+                        else if (oponentY + 2 <= 7 && board[oponentX, oponentY + 2] == '*')
                         {
                             return oponentY + 2;
                         }
@@ -557,10 +556,14 @@
             {
                 return y + 1;
             }
+            else if (x - 1 >= 0 && board[x - 1, y] == '*')
+            {
+                return y;
+            }
             else
             {
                 int rand = r.Next(1, 8);
-                while (board[0, rand] != '*')
+                while (board[1, rand] != '*')
                 {
                     rand = r.Next(1, 8);
                 }
@@ -627,7 +630,7 @@
         {
             for (int x = 0; x <= 6; x++)
             {
-                if (board[x, y] == '*' && board[x + 1, y] == 'X' || board[x + 1, y] == 'O')
+                if (board[x, y] == '*' && (board[x + 1, y] == 'X' || board[x + 1, y] == 'O'))
                 {
                     if (board[x + 1, y] == 'O')
                     {
