@@ -75,6 +75,7 @@
                 }
                 else if (index == 1)
                 {
+                    Console.WriteLine(board[6, 4]);
                     dropChoice = PlayerDrop(board, playerOne);
                     CheckAlso(board, playerOne, dropChoice);
                     DisplayBoard(board);
@@ -103,6 +104,40 @@
                         }
                     }
 
+                    y = aiDropChoice;
+                    index++;
+                }
+                else
+                {
+                    dropChoice = PlayerDrop(board, playerOne);
+                    CheckAlso(board, playerOne, dropChoice);
+                    DisplayBoard(board);
+                    win = CheckForWin(board, playerOne);
+                    if (win == 1)
+                    {
+                        PlayerWin(playerOne);
+                        again = restart(board);
+                        if (again == 2)
+                        {
+                            break;
+                        }
+                    }
+
+                    aiDropChoice = CheckAiTurn(board, dropChoice, nLevel, y);
+                    CheckAlso(board, playerTwo, aiDropChoice);
+                    DisplayBoard(board);
+                    win = CheckForWin(board, playerTwo);
+                    if (win == 1)
+                    {
+                        PlayerWin(playerTwo);
+                        again = restart(board);
+                        if (again == 2)
+                        {
+                            break;
+                        }
+                    }
+
+                    y = aiDropChoice;
                     index++;
                 }
 
@@ -297,9 +332,7 @@
 
             return restart;
         }
-
-        //int x = 5, y = 0;
-
+        //AI
         static int firstAiTurn(char[,] board)
         {
             for (int i = 0; i < 8; i++)
@@ -321,7 +354,6 @@
 
         static int secondAiTurn(char[,] board, int x, int y)
         {
-            Random r = new Random();
             if (checkVertical(x, y, board))
             {
                 return y;
@@ -332,83 +364,295 @@
             }
         }
 
-        //public void CheckAiTurn(char[,] board)
-        //{
-        //    Random r = new Random();
-        //    if (checkOponentVertical(oponentX, oponentY, board))
-        //    {
-        //        if (oponentX + 1 < board.GetLength(0) && board[oponentX + 1, oponentY] == '*')
-        //        {
-        //            board[oponentX + 1, oponentY] = 'O';
-        //            x = oponentX + 1;
-        //            return;
-        //        }
-        //    }
-        //    if (checkOponentHorizontal(oponentX, oponentY, board))
-        //    {
-        //        for (int i = 0; i < 7; i++)
-        //        {
-        //            if (board[oponentX, i] == 'X' && i + 2 < board.GetLength(1) && board[oponentX, i + 1] == 'X' && board[oponentX, i + 2] == 'X')
-        //            {
-        //                if ((i + 3 < board.GetLength(1)) && (board[oponentX, i + 3] == '*' && (board[oponentX - 1, i + 3] == 'O' || board[oponentX - 1, i + 3] == 'X')))
-        //                {
-        //                    board[oponentX, i + 3] = 'O';
-        //                    y = i + 3;
-        //                    return;
-        //                }
-        //                else if ((i - 1 >= 0) && (board[oponentX, i - 1] == '*' && (board[oponentX - 1, i - 1] == 'O' || board[oponentX - 1, i - 1] == 'X')))
-        //                {
-        //                    board[oponentX, i - 1] = 'O';
-        //                    y = i - 1;
-        //                    return;
-        //                }
-        //            }
-        //        }
-        //    }
-        //    averageAiTurn(board);
-        //}
+        static int CheckAiTurn(char[,] board, int oponentY, int choice, int aiY)
+        {
+            int oponentX = checkX(oponentY, board);
+            Random r = new Random();
+            int chance = r.Next(1, 11);
+            if (choice == 1)
+            {
+                if (checkOponentHorizontal(oponentX, oponentY, board) || checkOponentVertical(oponentX, oponentY, board) || checkOponentHorizontalDouble(oponentX, oponentY, board) && chance <= 15)
+                {
+                    if (checkOponentHorizontal(oponentX, oponentY, board))
+                    {
+                        if (oponentY - 3 >= 0 && board[oponentX, oponentY - 3] == '*')
+                        {
+                            return oponentY - 3;
+                        }
+                        else if (oponentY + 3 <= board.GetLength(0) && board[oponentX, oponentY + 3] == '*')
+                        {
+                            return oponentY + 3;
+                        }
+                        else
+                        {
+                            return averageAiTurn(board, aiY);
+                        }
+                    }
+                    else if (checkOponentVertical(oponentX, oponentY, board))
+                    {
+                        if (oponentX - 1 > 0 && board[oponentX - 1, oponentY] == '*')
+                        {
+                            return oponentY;
+                        }
+                        else
+                        {
+                            return averageAiTurn(board, aiY);
+                        }
+                    }
+                    else
+                    {
+                        if (oponentY - 2 >= 0 && board[oponentX, oponentY - 2] == '*')
+                        {
+                            return oponentY - 2;
+                        }
+                        else if (oponentY + 2 <= board.GetLength(0) && board[oponentX, oponentY + 2] == '*')
+                        {
+                            return oponentY + 2;
+                        }
+                        else
+                        {
+                            return averageAiTurn(board, aiY);
+                        }
+                    }
+                }
+                else
+                {
+                    return averageAiTurn(board, aiY);
+                }
+            }
+            else if (choice == 2)
+            {
+                if (checkOponentHorizontal(oponentX, oponentY, board) || checkOponentVertical(oponentX, oponentY, board) || checkOponentHorizontalDouble(oponentX, oponentY, board) && chance <= 4)
+                {
+                    if (checkOponentHorizontal(oponentX, oponentY, board))
+                    {
+                        if (oponentY - 3 >= 0 && board[oponentY - 3, oponentX] == '*')
+                        {
+                            return oponentY - 3;
+                        }
+                        else if (oponentY + 3 <= board.GetLength(0) && board[oponentY + 3, oponentX] == '*')
+                        {
+                            return oponentY + 3;
+                        }
+                        else
+                        {
+                            return averageAiTurn(board, aiY);
+                        }
+                    }
+                    else if (checkOponentVertical(oponentX, oponentY, board))
+                    {
+                        if (oponentX <= board.GetLength(1) && board[oponentY, oponentX + 1] == '*')
+                        {
+                            return oponentX + 1;
+                        }
+                        else
+                        {
+                            return averageAiTurn(board, aiY);
+                        }
+                    }
+                    else
+                    {
+                        if (oponentY - 2 >= 0 && board[oponentY - 2, oponentX] == '*')
+                        {
+                            return oponentY - 2;
+                        }
+                        else if (oponentY + 2 <= board.GetLength(0) && board[oponentY + 2, oponentX] == '*')
+                        {
+                            return oponentY + 2;
+                        }
+                        else
+                        {
+                            return averageAiTurn(board, aiY);
+                        }
+                    }
+                }
+                else
+                {
+                    return averageAiTurn(board, aiY);
+                }
+            }
+            else
+            {
+                if (checkOponentHorizontal(oponentX, oponentY, board) || checkOponentVertical(oponentX, oponentY, board) || checkOponentHorizontalDouble(oponentX, oponentY, board) && chance <= 1)
+                {
+                    if (checkOponentHorizontal(oponentX, oponentY, board))
+                    {
+                        if (oponentY - 3 >= 0 && board[oponentY - 3, oponentX] == '*')
+                        {
+                            return oponentY - 3;
+                        }
+                        else if (oponentY + 3 <= board.GetLength(0) && board[oponentY + 3, oponentX] == '*')
+                        {
+                            return oponentY + 3;
+                        }
+                        else
+                        {
+                            return averageAiTurn(board, aiY);
+                        }
+                    }
+                    else if (checkOponentVertical(oponentX, oponentY, board))
+                    {
+                        if (oponentX <= board.GetLength(1) && board[oponentY, oponentX + 1] == '*')
+                        {
+                            return oponentX + 1;
+                        }
+                        else
+                        {
+                            return averageAiTurn(board, aiY);
+                        }
+                    }
+                    else
+                    {
+                        if (oponentY - 2 >= 0 && board[oponentY - 2, oponentX] == '*')
+                        {
+                            return oponentY - 2;
+                        }
+                        else if (oponentY + 2 <= board.GetLength(0) && board[oponentY + 2, oponentX] == '*')
+                        {
+                            return oponentY + 2;
+                        }
+                        else
+                        {
+                            return averageAiTurn(board, aiY);
+                        }
+                    }
+                }
+                else
+                {
+                    return averageAiTurn(board, aiY);
+                }
+            }
+        }
 
-        //public void averageAiTurn(char[,] board)
-        //{
+        static int averageAiTurn(char[,] board, int y)
+        {
+            Random r = new Random();
+            int x = checkAiX(y, board);
+            if (x + 1 <= 6 && board[x + 1, y] == 'O' && board[x - 1, y] == '*')
+            {
+                return y;
+            }
+            else if (y - 1 >= 0 && y + 1 <= 7 && board[x, y - 1] == 'O' && board[x, y + 1] == '*')
+            {
+                return y + 1;
 
-        //}
+            }
+            else if (y - 1 >= 0 && y + 1 <= 7 && board[x, y + 1] == 'O' && board[x, y - 1] == '*')
+            {
+                return y - 1;
+            }
+            else if (y - 2 >= 0 && board[x, y - 1] == 'O' && board[x, y - 2] == '*')
+            {
+                return y - 2;
+            }
+            else if (y + 2 <= 7 && board[x, y + 1] == 'O' && board[x, y + 2] == '*')
+            {
+                return y + 2;
+            }
+            else if (y - 1 >= 0 && board[x, y - 1] == '*')
+            {
+                return y - 1;
+            }
+            else if (y + 1 <= 7 && board[x, y + 1] == '*')
+            {
+                return y + 1;
+            }
+            else
+            {
+                int rand = r.Next(1, 8);
+                while (board[0, rand] != '*')
+                {
+                    rand = r.Next(1, 8);
+                }
+                return rand;
+            }
+        }
 
-        //public bool checkOponentHorizontalDouble(int x, int y)
-        //{
-        //    try
-        //    {
-        //        if (tabla[x, y - 2] == "*" && tabla[x, y + 2] == "*" && tabla[x, y + 1] == "X" || tabla[x, y - 1] == "X")
-        //            return true;
-        //        return false;
-        //    }
-        //    catch { return false; }
-        //}
+        static bool checkOponentHorizontal(int x, int y, char[,] board)
+        {
+            if (y - 2 >= 0 && y + 2 <= 7)
+            {
+                if ((board[x, y - 2] == 'X' && board[x, y - 1] == 'X') || (board[x, y + 2] == 'X' && board[x, y + 1] == 'X'))
+                {
+                    return true;
+                }
+                return false;
+            }
+            else if (y - 2 >= 0)
+            {
+                if (board[x, y - 2] == 'X' && board[x, y - 1] == 'X')
+                {
+                    return true;
+                }
+                return false;
+            }
+            else if (y + 2 <= 7)
+            {
+                if (board[x, y + 2] == 'X' && board[x, y + 1] == 'X')
+                {
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
 
-        //public bool checkOponentHorizontal(int x, int y, char[,] board)
-        //{
-        //    if (x - 1 >= 0 && x + 1 < board.GetLength(0) && y >= 0 && y < board.GetLength(1))
-        //    {
-        //        if ((board[x - 1, y] == 'X' && board[x + 1, y] == 'X') ||
-        //            (x - 2 >= 0 && board[x - 2, y] == 'X' && board[x - 1, y] == 'X') ||
-        //            (x + 2 < board.GetLength(0) && board[x + 2, y] == 'X' && board[x + 1, y] == 'X'))
-        //        {
-        //            return true;
-        //        }
-        //    }
-        //    return false;
-        //}
+        static bool checkOponentHorizontalDouble(int x, int y, char[,] board)
+        {
+            if (y - 2 >= 0 || y + 2 <= 7)
+            {
+                if (board[x, y - 1] == 'X' && board[x, y + 1] == 'X')
+                {
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
 
-        //public bool checkOponentVertical(int x, int y, char[,] board)
-        //{
-        //    if (x >= 0 && x < board.GetLength(0) && y - 2 >= 0 && y < board.GetLength(1))
-        //    {
-        //        if (board[x, y - 1] == 'X' && board[x, y - 2] == 'X')
-        //        {
-        //            return true;
-        //        }
-        //    }
-        //    return false;
-        //}
+        static bool checkOponentVertical(int x, int y, char[,] board)
+        {
+            if (x + 2 <= 6)
+            {
+                if (board[x + 1, y] == 'X' && board[x + 2, y] == 'X')
+                {
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
+
+        static int checkAiX(int y, char[,] board)
+        {
+            for (int x = 0; x <= 6; x++)
+            {
+                if (board[x, y] == '*' && board[x + 1, y] == 'X' || board[x + 1, y] == 'O')
+                {
+                    if (board[x + 1, y] == 'O')
+                    {
+                        return x + 1;
+                    }
+                    else
+                    {
+                        return x + 2;
+                    }
+                }
+            }
+            return 0;
+        }
+
+        static int checkX(int y, char[,] board)
+        {
+            for (int x = 0; x <= 6; x++)
+            {
+                if (board[x, y] == '*' && board[x + 1, y] == 'X')
+                {
+                    return x + 1;
+                }
+            }
+            return 0;
+        }
 
         static bool checkVertical(int x, int y, char[,] board)
         {
